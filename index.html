@@ -92,6 +92,8 @@
         input[type="text"],
         input[type="number"],
         input[type="time"],
+        input[type="tel"],
+        input[type="file"],
         select,
         textarea {
             width: 100%;
@@ -103,6 +105,11 @@
             background: #FAFAFA;
             color: var(--midnight);
             transition: all 0.2s;
+        }
+
+        input[type="file"] {
+            padding: 12px;
+            background: #fff;
         }
 
         input[readonly] {
@@ -205,6 +212,16 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        .alert-box {
+            background-color: #FFF6F1;
+            border: 1px solid var(--atomic-tangerine);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            color: var(--midnight);
+        }
+
     </style>
 </head>
 <body>
@@ -212,7 +229,7 @@
 <div class="container">
     <header>
         <h1>🐶 Registro Pawwi Travel</h1>
-        <p class="subtitle">Cuéntanos sobre tu peludo para que viva una experiencia Pawwi inolvidable.</p>
+        <p class="subtitle">Cuéntanos sobre ti y tu peludo para que viva una experiencia Pawwi inolvidable.</p>
     </header>
 
     <div class="progress-container">
@@ -221,12 +238,37 @@
         <div class="progress-dot" id="dot-2"></div>
         <div class="progress-dot" id="dot-3"></div>
         <div class="progress-dot" id="dot-4"></div>
+        <div class="progress-dot" id="dot-5"></div>
     </div>
 
     <form id="daycareForm">
         
         <div class="step active" id="step-0">
-            <h2>1. Perfil del Peludo</h2>
+            <h2>1. Datos del Tutor</h2>
+            
+            <div class="form-group">
+                <label>Nombres y Apellidos *</label>
+                <input type="text" name="tutor_nombre" placeholder="Ej: Juan Pérez" required>
+            </div>
+
+            <div class="form-group">
+                <label>Número de Cédula (C.C.) *</label>
+                <input type="number" name="tutor_cedula" placeholder="Ej: 1010123456" required>
+            </div>
+
+            <div class="form-group">
+                <label>Teléfono de Contacto (WhatsApp) *</label>
+                <input type="tel" name="tutor_telefono" placeholder="Ej: 300 123 4567" required>
+            </div>
+            
+            <div class="buttons">
+                <button type="button" class="btn-prev" style="visibility: hidden;">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep(0)">Siguiente</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-1">
+            <h2>2. Perfil del Peludo</h2>
             
             <div class="form-group">
                 <label>Nombre del perrito(s) *</label>
@@ -258,15 +300,30 @@
                     <option value="No">No</option>
                 </select>
             </div>
+
+            <div class="alert-box">
+                <strong>⚠️ Carnet de Vacunación:</strong> Para garantizar la seguridad de todos los peludos, es obligatorio contar con el esquema de vacunación al día (incluyendo Tos de las perreras). 
+                <br><br>
+                Te solicitaremos una foto del carnet por WhatsApp para confirmar la reserva.
+            </div>
+
+            <div class="form-group">
+                <label>¿Tiene su esquema de vacunas al día? *</label>
+                <select name="vacunas_aldia" required>
+                    <option value="">Selecciona una opción</option>
+                    <option value="Si, todas al dia">Sí, todas al día</option>
+                    <option value="Le falta alguna">Le falta alguna (Me comprometo a actualizarlo)</option>
+                </select>
+            </div>
             
             <div class="buttons">
-                <button type="button" class="btn-prev" style="visibility: hidden;">Atrás</button>
-                <button type="button" class="btn-next" onclick="nextStep(0)">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep(1)">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep(1)">Siguiente</button>
             </div>
         </div>
 
-        <div class="step" id="step-1">
-            <h2>2. Detalles de la estadía</h2>
+        <div class="step" id="step-2">
+            <h2>3. Detalles de la estadía</h2>
             <p class="subtitle">
                 Cuántos días necesitas el servicio.
             </p>
@@ -307,13 +364,13 @@
             </div>
 
             <div class="buttons">
-                <button type="button" class="btn-prev" onclick="prevStep(1)">Atrás</button>
-                <button type="button" class="btn-next" onclick="nextStep(1)">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep(2)">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep(2)">Siguiente</button>
             </div>
         </div>
 
-        <div class="step" id="step-2">
-            <h2>3. Personalidad y Carácter</h2>
+        <div class="step" id="step-3">
+            <h2>4. Personalidad y Carácter</h2>
 
             <div class="form-group">
                 <label>¿Cómo describirías su personalidad?</label>
@@ -347,13 +404,13 @@
             </div>
 
             <div class="buttons">
-                <button type="button" class="btn-prev" onclick="prevStep(2)">Atrás</button>
-                <button type="button" class="btn-next" onclick="nextStep(2)">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep(3)">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep(3)">Siguiente</button>
             </div>
         </div>
 
-        <div class="step" id="step-3">
-            <h2>4. Rutinas de Cuidado</h2>
+        <div class="step" id="step-4">
+            <h2>5. Rutinas de Cuidado</h2>
 
             <div class="form-group">
                 <label>🥣 Alimentación</label>
@@ -386,13 +443,13 @@
             </div>
 
             <div class="buttons">
-                <button type="button" class="btn-prev" onclick="prevStep(3)">Atrás</button>
-                <button type="button" class="btn-next" onclick="nextStep(3)">Siguiente</button>
+                <button type="button" class="btn-prev" onclick="prevStep(4)">Atrás</button>
+                <button type="button" class="btn-next" onclick="nextStep(4)">Siguiente</button>
             </div>
         </div>
 
-        <div class="step" id="step-4">
-            <h2>5. Inventario</h2>
+        <div class="step" id="step-5">
+            <h2>6. Inventario</h2>
             <p class="subtitle">Selecciona lo que entregarás al Pawwer:</p>
 
             <div class="checkbox-group">
@@ -425,7 +482,7 @@
             </div>
 
             <div class="buttons">
-                <button type="button" class="btn-prev" onclick="prevStep(4)">Atrás</button>
+                <button type="button" class="btn-prev" onclick="prevStep(5)">Atrás</button>
                 <button type="button" class="btn-next" onclick="sendForm()">✅ Enviar Registro</button>
             </div>
         </div>
@@ -470,8 +527,8 @@
             return;
         }
 
-        // VALIDACIÓN ESPECÍFICA PARA DÍAS DE ESTADÍA
-        if (currentStep === 1) {
+        // VALIDACIÓN ESPECÍFICA PARA DÍAS DE ESTADÍA (AHORA PASO 2)
+        if (currentStep === 2) {
             const diasInput = document.querySelector('input[name="dias_estadia"]');
             const dias = parseInt(diasInput.value, 10);
 
@@ -509,7 +566,7 @@
     }
 
     function sendForm() {
-        document.getElementById('step-4').classList.remove('active');
+        document.getElementById('step-5').classList.remove('active');
         document.getElementById('step-loading').classList.add('active');
 
         // Recopilar datos
@@ -517,12 +574,17 @@
         const formData = new FormData(form);
         
         // Construir mensaje largo para el correo
-        let messageBody = "--- 🐶 PERFIL GENERAL ---\n";
-        
+        let messageBody = "--- 👤 DATOS DEL TUTOR ---\n";
+        messageBody += `Nombre: ${formData.get('tutor_nombre')}\n`;
+        messageBody += `Cédula: ${formData.get('tutor_cedula')}\n`;
+        messageBody += `Teléfono / WhatsApp: ${formData.get('tutor_telefono')}\n\n`;
+
+        messageBody += "--- 🐶 PERFIL DEL PELUDO ---\n";
         messageBody += `Nombre: ${formData.get('nombre')}\n`;
         messageBody += `Raza/Tamaño: ${formData.get('raza')}\n`;
         messageBody += `Edad: ${formData.get('edad')}\n`;
-        messageBody += `Sexo: ${formData.get('sexo')} (${formData.get('esterilizado') === 'Si' ? 'Esterilizado' : 'Sin esterilizar'})\n\n`;
+        messageBody += `Sexo: ${formData.get('sexo')} (${formData.get('esterilizado') === 'Si' ? 'Esterilizado' : 'Sin esterilizar'})\n`;
+        messageBody += `Vacunas al día: ${formData.get('vacunas_aldia')}\n\n`;
 
         messageBody += "🏡 ESTADÍA\n";
         messageBody += `Días de servicio: ${formData.get('dias_estadia')} días\n\n`;
@@ -582,7 +644,7 @@
                 console.log('FAILED...', error);
                 alert("Hubo un error enviando. Por favor toma captura.");
                 document.getElementById('step-loading').classList.remove('active');
-                document.getElementById('step-4').classList.add('active'); // Volver
+                document.getElementById('step-5').classList.add('active'); // Volver
             });
     }
 
